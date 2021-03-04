@@ -13,6 +13,11 @@
             AND active = true
     </select>
 
+    <select id="countUsername" resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM pallet_transport_system.user
+        WHERE username=#{username}
+    </select>
+
     <select id="getNextUserId" resultType="java.lang.Integer">
         SELECT MAX(id)+1 FROM pallet_transport_system.user
     </select>
@@ -22,14 +27,9 @@
         WHERE id=#{id}
     </select>
 
-    <update id="activateUser">
+    <update id="changeStatus">
         UPDATE pallet_transport_system.user
-        SET active = 1 WHERE id=#{id};
-    </update>
-
-    <update id="deactivateUser">
-        UPDATE pallet_transport_system.user
-        SET active = 0 WHERE id=#{id};
+        SET active = #{status} WHERE id=#{id};
     </update>
 
     <update id="activateAllUser">
@@ -39,6 +39,11 @@
 
     <select id="listUser" resultType="com.nihaoyin.ptsservice.bean.User">
         SELECT * FROM pallet_transport_system.user
+        LIMIT #{base}, #{offset}
+    </select>
+
+    <select id="countUser" resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM pallet_transport_system.user
     </select>
 
     <insert id="addUser" parameterType="com.nihaoyin.ptsservice.bean.User">
@@ -46,4 +51,7 @@
         values(#{id}, #{username}, #{password}, NOW(), true )
     </insert>
 
+    <delete id="deleteUser">
+        delete from pallet_transport_system.user where id = #{id}
+    </delete>
 </mapper>

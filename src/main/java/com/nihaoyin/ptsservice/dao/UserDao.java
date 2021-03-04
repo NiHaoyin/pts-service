@@ -8,20 +8,24 @@ import java.util.List;
 
 @Repository
 public interface UserDao {
-    public Integer getUserId(@Param("username") String username,
+    Integer getUserId(@Param("username") String username,
                              @Param("password") String password);
 
-    public Integer getNextUserId();
+    Integer getNextUserId();
 
-    public boolean getUserStatus(@Param("id") int id);
+    Integer countUsername(@Param("username")String username);
 
-    public void addUser(User newUser);
+    boolean getUserStatus(@Param("id") int id);
 
-    public void activateUser(@Param("id") int id);
+    void addUser(User newUser);
 
-    public void deactivateUser(@Param("id") int id);
+    void changeStatus(@Param("id") int id, boolean status);
 
-    public void activateAllUser();
+    void activateAllUser();
 
-    public List<User> listUser();
+    List<User> listUser(@Param("base") int base, @Param("offset") int offset);
+
+    Integer countUser();
+
+    void deleteUser(@Param("id") int id);
 }

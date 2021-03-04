@@ -42,6 +42,4 @@ public class JsonUtil {
         return JSON.toJSONString(ret);
     }
 
-
-
 }
