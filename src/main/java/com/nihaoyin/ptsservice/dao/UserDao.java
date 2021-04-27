@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface UserDao {
     Integer getUserId(@Param("username") String username,
-                             @Param("password") String password);
+                      @Param("password") String password);
 
     Integer getNextUserId();
 
@@ -19,7 +19,7 @@ public interface UserDao {
 
     void addUser(User newUser);
 
-    void changeStatus(@Param("id") int id, boolean status);
+    void changeStatus(@Param("userId") int id, boolean status);
 
     void activateAllUser();
 
@@ -27,5 +27,5 @@ public interface UserDao {
 
     Integer countUser();
 
-    void deleteUser(@Param("id") int id);
+    void deleteUser(@Param("userId") int id);
 }

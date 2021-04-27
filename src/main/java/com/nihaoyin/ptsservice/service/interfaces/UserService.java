@@ -13,4 +13,8 @@ public interface UserService {
     boolean activateAllUser();
     boolean addUser(User newUser);
     boolean deleteUser(int userId);
+    int Test() throws InterruptedException;
+
+    class CarManager {
+    }
 }

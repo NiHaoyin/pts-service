@@ -1,7 +1,7 @@
 package com.nihaoyin.ptsservice.bean;
 
 public class User {
-    private String id;
+    private String userId;
     private String username;
     private String password;
     private boolean active;
@@ -22,14 +22,14 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id='" + id + '\'' +
+                "id='" + userId + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
 
-    public String getId() {
-        return id;
+    public String getUserId() {
+        return userId;
     }
 
     public String getUsername() {
@@ -45,7 +45,7 @@ public class User {
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.userId = id;
     }
 
     public void setActive(boolean active){

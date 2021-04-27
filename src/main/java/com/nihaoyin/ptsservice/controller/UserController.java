@@ -20,7 +20,7 @@ public class UserController {
     private final static Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    UserDao userdao;
+    private UserDao userdao;
 
     @Autowired
     UserService userService;
@@ -114,12 +114,31 @@ public class UserController {
 
     @RequestMapping("/test")
     public Object Test(HttpSession session){
+        logger.info("this is test");
         if (session.getAttribute("user") == null){
             session.setAttribute("user", "nhy");
             return session.getId();
         }
+        DemoController demoController = new DemoController();
+        try{
+            demoController.pushToWeb("hello", "10");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return session.getAttribute("user");
     }
 
+    @RequestMapping("/test2/{id}")
+    public Object Test2(@PathVariable("id") int id) throws InterruptedException {
+        logger.info("id{} come in", id);
+        int ret = userService.Test();
+        if(id == 1){
+            Thread.sleep(10000);
+            return JsonUtil.failure("id=1");
+        }
 
+//        Thread.sleep(10000);
+        logger.info("id{} come out", id);
+        return JsonUtil.success(ret);
+    }
 }

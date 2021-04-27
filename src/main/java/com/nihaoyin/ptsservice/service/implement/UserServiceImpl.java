@@ -109,4 +109,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    private int count = 0;
+    public int Test() throws InterruptedException {
+        logger.info("count++");
+        return count++;
+    }
+
 }

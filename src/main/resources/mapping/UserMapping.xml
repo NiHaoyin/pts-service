@@ -24,12 +24,12 @@
 
     <select id="getUserStatus" resultType="java.lang.Boolean">
         SELECT active FROM pallet_transport_system.user
-        WHERE id=#{id}
+        WHERE id=#{userId}
     </select>
 
     <update id="changeStatus">
         UPDATE pallet_transport_system.user
-        SET active = #{status} WHERE id=#{id};
+        SET active = #{status} WHERE id=#{userId};
     </update>
 
     <update id="activateAllUser">
@@ -48,10 +48,10 @@
 
     <insert id="addUser" parameterType="com.nihaoyin.ptsservice.bean.User">
         INSERT INTO pallet_transport_system.user(id, username, password, created, active)
-        values(#{id}, #{username}, #{password}, NOW(), true )
+        values(#{userId}, #{username}, #{password}, NOW(), true )
     </insert>
 
     <delete id="deleteUser">
-        delete from pallet_transport_system.user where id = #{id}
+        delete from pallet_transport_system.user where id = #{userId}
     </delete>
 </mapper>
