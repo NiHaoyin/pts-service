@@ -1,9 +1,7 @@
-package com.nihaoyin.ptsservice.service.implement;
+package com.nihaoyin.ptsservice.service.implement.manager;
 
 import com.nihaoyin.ptsservice.bean.Car;
-import com.nihaoyin.ptsservice.bean.Order;
-import com.nihaoyin.ptsservice.bean.Position;
-import com.nihaoyin.ptsservice.service.interfaces.CarManager;
+import com.nihaoyin.ptsservice.service.interfaces.manager.CarManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +9,7 @@ import java.util.*;
 
 public class CarManagerImpl implements CarManager {
     private final static Logger logger = LoggerFactory.getLogger(CarManagerImpl.class);
-    private Queue<Car> waitingList1 = new PriorityQueue<Car>(
+    private final Queue<Car> waitingList1 = new PriorityQueue<Car>(
             new Comparator<Car>(){
                 // 载重小的在队首
                 @Override
@@ -25,15 +23,15 @@ public class CarManagerImpl implements CarManager {
                 }
             }
     );
-    private Queue<Car> waitingList2 = new PriorityQueue<Car>();
-    private Queue<Car> waitingList3 = new PriorityQueue<Car>();
-    private List<Car> runningList = new ArrayList<Car>();
+    private final Queue<Car> waitingList2 = new PriorityQueue<Car>();
+    private final Queue<Car> waitingList3 = new PriorityQueue<Car>();
+    private final List<Car> runningList = new ArrayList<Car>();
 
     // 集配初始化
     public void init(){
 
     }
-    public List<Car> listBusyCars(){
+    public List<Car> listRunningCar(){
         return runningList;
     }
 

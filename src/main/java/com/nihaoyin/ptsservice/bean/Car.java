@@ -7,6 +7,23 @@ public class Car {
     private Position position;
     private double load;
     private String status; // 有running和waiting两种状态
+    private int capacity; // 取值是1或2
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "carId='" + carId + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 
     public Car(String carId, String carType, int speed, Position position, double load, String status) {
         this.carId = carId;

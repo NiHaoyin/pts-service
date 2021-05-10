@@ -11,10 +11,20 @@ public class Order {
     private String carType;
     private String status;
 
+    private String created;
+    private boolean isDeleted;
+
     public Order(int priority) {
         this.priority = priority;
     }
-
+    public Order(String src, String dst, String trayId, int orderId, int priority, int userId){
+        this.src = src;
+        this.dst = dst;
+        this.trayId = trayId;
+        this.orderId = orderId;
+        this.priority = priority;
+        this.userId = userId;
+    }
     public void setPriority(int priority) {
         this.priority = priority;
     }
@@ -29,6 +39,22 @@ public class Order {
 
     public void setTrayId(String trayId) {
         this.trayId = trayId;
+    }
+
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
     public void setOrderId(int orderId) {

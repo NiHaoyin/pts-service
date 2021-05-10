@@ -18,6 +18,8 @@ public class Tray {
         this.nodeId = nodeId;
     }
 
+
+
     public String getTrayType() {
         return trayType;
     }

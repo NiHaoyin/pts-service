@@ -115,4 +115,9 @@ public class UserServiceImpl implements UserService {
         return count++;
     }
 
+    public static void main(String[] args) {
+        UserService u = new UserServiceImpl();
+
+    }
+
 }
