@@ -10,6 +10,8 @@ import java.io.IOException;
 
 @RestController
 public class DemoController {
+    WebSocketServer webSocketServer = new WebSocketServer();
+
     @GetMapping("index")
     public ResponseEntity<String> index(){
         return ResponseEntity.ok("请求成功");
@@ -20,9 +22,9 @@ public class DemoController {
         return new ModelAndView("websocket");
     }
 
-    @RequestMapping("/push/{toUserId}")
+    @RequestMapping("/pushtrace")
     public ResponseEntity<String> pushToWeb(String message, @PathVariable String toUserId) throws IOException {
-        WebSocketServer.sendInfo(message,toUserId);
+        webSocketServer.sendMessage(message);
         return ResponseEntity.ok("MSG SEND SUCCESS");
     }
 

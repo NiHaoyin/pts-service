@@ -31,7 +31,6 @@ public class SimulationController {
     public Object finishSimulating(){
         logger.info("结束模拟");
         simulationSwitch = false;
-
         return JsonUtil.success();
     }
 

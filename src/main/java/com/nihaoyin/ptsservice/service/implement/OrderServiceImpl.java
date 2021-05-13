@@ -76,6 +76,7 @@ public class OrderServiceImpl implements OrderService, InitializingBean {
         orderDao.deleteOrder(orderId);
     }
 
+    // 随机生成70条订单
     public synchronized void init() throws Exception {
         nextOrderId = orderDao.getNextOrderId();
         Map<String, Node> nodeMap = resourceManager.getNodeMap();
@@ -83,11 +84,10 @@ public class OrderServiceImpl implements OrderService, InitializingBean {
         int i = 0;
         for (Map.Entry<String, Node> entry : nodeMap.entrySet()) {
             Node node = entry.getValue();
-            i++;
-            if(i > 20){
+            if(i > 70){
                 break;
             }
-            if (node.isOccupied()) {
+            if (!node.getTrayId().equals("")) {
                 String src = node.getNodeId();
                 String trayId = node.getTrayId();
                 for (Map.Entry<String, Node> x : nodeMap.entrySet()) {
@@ -95,8 +95,9 @@ public class OrderServiceImpl implements OrderService, InitializingBean {
                     if (!dstNode.isOccupied()
                         && (dstNode.getTrayType().equals(node.getTrayType()))
                         && !dstNode.getNodeId().equals(src)
-                        && resourceManager.getTray(trayId).getStatus().equals("waiting")) {
+                        && resourceManager.getTray(trayId).getStatus().equals("noOrder")) {
                         String dst = dstNode.getNodeId();
+                        i++;
                         Order order = new Order(src, dst, trayId, nextOrderId, r.nextInt(3)+1, 1);
                         placeOrder(order);
                         break;

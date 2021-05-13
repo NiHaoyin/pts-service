@@ -8,7 +8,8 @@ import java.util.List;
 public interface CarManager {
     void init(); // 集配初始化
     List<Car> listRunningCar();
+    List<Car> listWaitingCar(String carType);
     Car getCar(String carId);
-    void pushCar(Car car, String targetList);
-    void changeStatus(String carId, String newStatus) throws Exception;
+    void pushCar2WL(Car car);
+    void changeCarStatus(String carId, String newStatus) throws Exception;
 }

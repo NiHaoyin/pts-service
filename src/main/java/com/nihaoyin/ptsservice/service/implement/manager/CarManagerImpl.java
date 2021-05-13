@@ -1,57 +1,84 @@
 package com.nihaoyin.ptsservice.service.implement.manager;
 
 import com.nihaoyin.ptsservice.bean.Car;
+import com.nihaoyin.ptsservice.bean.Node;
+import com.nihaoyin.ptsservice.bean.Position;
 import com.nihaoyin.ptsservice.service.interfaces.manager.CarManager;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.*;
 
 public class CarManagerImpl implements CarManager {
     private final static Logger logger = LoggerFactory.getLogger(CarManagerImpl.class);
-    private final Queue<Car> waitingList1 = new PriorityQueue<Car>(
-            new Comparator<Car>(){
-                // 载重小的在队首
-                @Override
-                public int compare(Car c1, Car c2){
-                    if (c1.getLoad() - c2.getLoad() > 0){
-                        return 1;
-                    }else if(c1.getLoad() - c2.getLoad() == 0){
-                        return 0;
-                    }
-                    return -1;
-                }
-            }
-    );
-    private final Queue<Car> waitingList2 = new PriorityQueue<Car>();
-    private final Queue<Car> waitingList3 = new PriorityQueue<Car>();
+    private final List<Car> waitingPBYSCList = new ArrayList<Car>();
+    private final List<Car> waitingPBTCList1 = new ArrayList<Car>();
+    private final List<Car> waitingPBTCList2 = new ArrayList<Car>();
+    private final List<Car> waitingCCList = new ArrayList<Car>();
     private final List<Car> runningList = new ArrayList<Car>();
 
-    // 集配初始化
+    // 集配初始化, 车辆开到最近的托盘集配点
     public void init(){
 
     }
+
+
     public List<Car> listRunningCar(){
         return runningList;
     }
 
+    public List<Car> listWaitingCar(String carType){
+        switch (carType) {
+            case "PBYSC":
+                return waitingPBYSCList;
+            case "PBTC1":
+                return waitingPBTCList1;
+            case "PBTC2":
+                return waitingPBTCList2;
+            case "PBTC":
+                List<Car> ret = new ArrayList<Car>();
+                ret.addAll(waitingPBTCList1);
+                ret.addAll(waitingPBTCList2);
+                return ret;
+            case "CC":
+                return waitingCCList;
+            case "all":
+                List<Car> ret2 = new ArrayList<Car>();
+                ret2.addAll(waitingPBTCList1);
+                ret2.addAll(waitingPBTCList2);
+                ret2.addAll(waitingCCList);
+                ret2.addAll(waitingPBYSCList);
+                return ret2;
+            default:
+                return null;
+        }
+    }
     public synchronized Car getCar(String carId){
         for(Car car : runningList){
             if(car.getCarId().equals(carId)){
                 return car;
             }
         }
-        for(Car car : waitingList1){
+        for(Car car : waitingPBYSCList){
             if(car.getCarId().equals(carId)){
                 return car;
             }
         }
-        for(Car car : waitingList2){
+        for(Car car : waitingPBTCList1){
             if(car.getCarId().equals(carId)){
                 return car;
             }
         }
-        for(Car car : waitingList3){
+        for(Car car : waitingPBTCList2){
+            if(car.getCarId().equals(carId)){
+                return car;
+            }
+        }
+        for(Car car : waitingCCList){
             if(car.getCarId().equals(carId)){
                 return car;
             }
@@ -59,51 +86,87 @@ public class CarManagerImpl implements CarManager {
         return null;
     }
 
-    public synchronized void pushCar(Car car, String targetList){
-        switch (targetList) {
-            case "waitingList1":
-                waitingList1.add(car);
+    public synchronized void pushCar2WL(Car car){
+        switch (car.getCarType()) {
+            case "PBYSC":
+                waitingPBYSCList.add(car);
                 break;
-            case "waitingList2":
-                waitingList2.add(car);
+            case "PBTC1":
+                waitingPBTCList1.add(car);
                 break;
-            case "waitingList3":
-                waitingList3.add(car);
+            case "PBTC2":
+                waitingPBTCList2.add(car);
                 break;
-            case "runningList":
-                runningList.add(car);
+            case "CC":
+                waitingCCList.add(car);
                 break;
         }
     }
 
-    public synchronized void changeStatus(String carId, String newStatus)throws Exception{
+    public synchronized void changeCarStatus(String carId, String newStatus)throws Exception{
         Car car = getCar(carId);
-        if(car.getStatus().equals(newStatus)){
-            throw new Exception("参数错误，该车辆已经处于 "+newStatus+" 状态");
+        if(car == null){
+            throw new Exception("carId不存在");
         }
         if(newStatus.equals("running")){
-            waitingList1.remove(car);
-            waitingList2.remove(car);
-            waitingList3.remove(car);
+            switch (car.getCarType()){
+                case "PBYSC":
+                    waitingPBYSCList.remove(car);
+                    break;
+                case "PBTC1":
+                    waitingPBTCList1.remove(car);
+                    break;
+                case "PBTC2":
+                    waitingPBTCList2.remove(car);
+                    break;
+                case "CC":
+                    waitingCCList.remove(car);
+                    break;
+            }
             runningList.add(car);
             car.setStatus(newStatus);
         }else if(newStatus.equals("waiting")){
             runningList.remove(car);
-            switch (car.getCarType()){
-                case "PBYS":
-                    waitingList1.add(car);
-                    break;
-
-            }
+            pushCar2WL(car);
             car.setStatus(newStatus);
         }else{
             throw new Exception("参数错误: "+newStatus+"不合法");
         }
     }
 
-    public static void main(String[] args) {
-        CarManager carManager = new CarManagerImpl();
+    public CarManagerImpl() throws IOException {
+        XSSFWorkbook NodeXwb = new XSSFWorkbook("src/main/java/com/nihaoyin/ptsservice/config/car.xlsx");
+        NodeXwb.close();
+        XSSFSheet NodeSheet = NodeXwb.getSheetAt(0);
+        XSSFRow row;
+        String carId;
+        String carType;
+        double carX;
+        double carY;
+        int NLength= NodeSheet.getPhysicalNumberOfRows()-2;
+        for (int i = 1; i <= NLength; i++)
+        {
+            row = NodeSheet.getRow(i);
+            carId = row.getCell(0).getStringCellValue(); //获取运输车Id
+            carType = row.getCell(1).getStringCellValue(); //运输车类型
+            carX = row.getCell(4).getNumericCellValue();//获取集配点x坐标
+            carY = row.getCell(5).getNumericCellValue();//获取集配点y坐标
+            Position carPosition= new Position((int)carX,(int)carY,0);
+            Car car = new Car(carId, carType, 30, carPosition, 0.0, "waiting");
+            pushCar2WL(car);
+        }
+    }
 
+    public static void main(String[] args) throws IOException {
+        CarManager carManager = new CarManagerImpl();
+        List<Car> l1 = carManager.listWaitingCar("PBYSC");
+        for(Car c: l1){
+            System.out.println(c.toString());
+        }
+        l1 = carManager.listRunningCar();
+        for(Car c: l1){
+            System.out.println(c.toString());
+        }
     }
 
 }

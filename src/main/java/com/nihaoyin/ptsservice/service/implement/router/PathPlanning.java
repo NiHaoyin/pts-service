@@ -139,7 +139,7 @@ public class PathPlanning {
                     TraceList.add(tempTrace);
                     int[] Route1=D1.getSinglePath();
                     for (int i=0;i<Route1.length;i++){
-                        System.out.println(Route1[i]);
+//                        System.out.println(Route1[i]);
                         for (Vertex vertex:VertexList){
                             if(Route1[i]==vertex.getVertexId()){
                                 tempPosition=vertex.getPosition();
@@ -169,7 +169,7 @@ public class PathPlanning {
                     TraceList.add(tempTrace);
                     int[] Route2=D2.getSinglePath();
                     for (int i=0;i<Route2.length;i++){
-                        System.out.println(Route2[i]);
+//                        System.out.println(Route2[i]);
                         for (Vertex vertex:VertexList){
                             if(Route2[i]==vertex.getVertexId()){
                                 tempPosition=vertex.getPosition();
@@ -229,7 +229,7 @@ public class PathPlanning {
                     TraceList.add(tempTrace);
                     int[] Route4=D4.getSinglePath();
                     for (int i=0;i<Route4.length;i++){
-                        System.out.println(Route4[i]);
+//                        System.out.println(Route4[i]);
                         for (Vertex vertex:VertexList){
                             if(Route4[i]==vertex.getVertexId()){
                                 tempPosition=vertex.getPosition();
@@ -261,7 +261,7 @@ public class PathPlanning {
                     TraceList.add(tempTrace);
                     int[] Route5=D5.getSinglePath();
                     for (int i=0;i<Route5.length;i++){
-                        System.out.println(Route5[i]);
+//                        System.out.println(Route5[i]);
                         for (Vertex vertex:VertexList){
                             if(Route5[i]==vertex.getVertexId()){
                                 tempPosition=vertex.getPosition();
@@ -291,7 +291,7 @@ public class PathPlanning {
                     TraceList.add(tempTrace);
                     int[] Route6=D6.getSinglePath();
                     for (int i=0;i<Route6.length;i++){
-                        System.out.println(Route6[i]);
+//                        System.out.println(Route6[i]);
                         for (Vertex vertex:VertexList){
                             if(Route6[i]==vertex.getVertexId()){
                                 tempPosition=vertex.getPosition();
@@ -321,7 +321,7 @@ public class PathPlanning {
                     TraceList.add(tempTrace);
                     int[] Route7=D7.getSinglePath();
                     for (int i=0;i<Route7.length;i++){
-                        System.out.println(Route7[i]);
+//                        System.out.println(Route7[i]);
                         for (Vertex vertex:VertexList){
                             if(Route7[i]==vertex.getVertexId()){
                                 tempPosition=vertex.getPosition();
@@ -351,7 +351,7 @@ public class PathPlanning {
                     TraceList.add(tempTrace);
                     int[] Route8=D8.getSinglePath();
                     for (int i=0;i<Route8.length;i++){
-                        System.out.println(Route8[i]);
+//                        System.out.println(Route8[i]);
                         for (Vertex vertex:VertexList){
                             if(Route8[i]==vertex.getVertexId()){
                                 tempPosition=vertex.getPosition();
@@ -594,7 +594,7 @@ public class PathPlanning {
                     TraceList.add(tempTrace);
                     int[] Route4=D7.getSinglePath();
                     for (int i=0;i<Route4.length;i++){
-                        System.out.println(Route4[i]);
+//                        System.out.println(Route4[i]);
                         for (Vertex vertex:VertexList){
                             if(Route4[i]==vertex.getVertexId()){
                                 tempPosition=vertex.getPosition();
@@ -643,7 +643,7 @@ public class PathPlanning {
                 TraceList.add(tempTrace);
                 int[] Route2=D6.getSinglePath();
                 for (int i=0;i<Route2.length;i++){
-                    System.out.println(Route2[i]);
+//                    System.out.println(Route2[i]);
                     for (Vertex vertex:VertexList){
                         if(Route2[i]==vertex.getVertexId()){
                             tempPosition=vertex.getPosition();
@@ -691,7 +691,7 @@ public class PathPlanning {
                     TraceList.add(tempTrace);
                     int[] Route4=D7.getSinglePath();
                     for (int i=0;i<Route4.length;i++){
-                        System.out.println(Route4[i]);
+//                        System.out.println(Route4[i]);
                         for (Vertex vertex:VertexList){
                             if(Route4[i]==vertex.getVertexId()){
                                 tempPosition=vertex.getPosition();
@@ -738,7 +738,7 @@ public class PathPlanning {
                     TraceList.add(tempTrace);
                     int[] Route4=D7.getSinglePath();
                     for (int i=0;i<Route4.length;i++){
-                        System.out.println(Route4[i]);
+//                        System.out.println(Route4[i]);
                         for (Vertex vertex:VertexList){
                             if(Route4[i]==vertex.getVertexId()){
                                 tempPosition=vertex.getPosition();
@@ -847,13 +847,9 @@ public class PathPlanning {
             NodeY = NodeRow.getCell(5).getNumericCellValue();//获取集配点y坐标
             Position NodePosition= new Position((int)NodeX,(int)NodeY,0);
             NodeState= NodeRow.getCell(6).getStringCellValue();//获取集配点占用情况
-            if (NodeState.equals("True")){
-                NodeIsOccupied=true;
-            } else{
-                NodeIsOccupied=false;
-            }
-            NodeVertex1=Integer.valueOf(NodeRow.getCell(7).getStringCellValue());//获取集配点对应节点1
-            NodeVertex2=Integer.valueOf(NodeRow.getCell(8).getStringCellValue());//获取集配点对应节点2
+            NodeIsOccupied= NodeState.equals("True");
+            NodeVertex1=Integer.parseInt(NodeRow.getCell(7).getStringCellValue());//获取集配点对应节点1
+            NodeVertex2=Integer.parseInt(NodeRow.getCell(8).getStringCellValue());//获取集配点对应节点2
             NodeMotionType=NodeRow.getCell(9).getStringCellValue();//获取集配点移动方式
             Node node= new Node(NodeId, NodePosition,NodeIsOccupied, "", NodeType,NodeVertex1,NodeVertex2,NodeMotionType);
             NodeSet.add(node);

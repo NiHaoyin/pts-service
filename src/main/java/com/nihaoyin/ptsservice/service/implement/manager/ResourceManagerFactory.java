@@ -7,6 +7,7 @@ final public class ResourceManagerFactory {
     static{
         try {
             resourceManager = new ResourceManagerImpl();
+            resourceManager.init();
         } catch (Exception exception) {
             exception.printStackTrace();
         }

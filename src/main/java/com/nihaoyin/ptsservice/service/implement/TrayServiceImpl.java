@@ -22,19 +22,14 @@ public class TrayServiceImpl implements TrayService {
     }
 
     @Override
-    public List<String> listWaitingTrayId() {
-        return resourceManager.listTrayId("waiting");
+    public List<String> listTrayId(String status) {
+        return resourceManager.listTrayId(status);
     }
 
     @Override
-    public List<String> listRunningTrayId() {
-        return resourceManager.listTrayId("running");
-    }
-
-    @Override
-    public List<Tray> listWaitingTray() {
+    public List<Tray> listTray(String status) {
         List<Tray> ret = new ArrayList<Tray>();
-        List<String> trayIdList = listWaitingTrayId();
+        List<String> trayIdList = listTrayId(status);
         for(String s: trayIdList){
             ret.add(resourceManager.getTray(s));
         }
@@ -42,24 +37,8 @@ public class TrayServiceImpl implements TrayService {
     }
 
     @Override
-    public List<Tray> listRunningTray() {
-        List<Tray> ret = new ArrayList<Tray>();
-        List<String> trayIdList = listRunningTrayId();
-        for(String s: trayIdList){
-            ret.add(resourceManager.getTray(s));
-        }
-        return ret;
-    }
-
-    @Override
-    public int countWaitingTray() {
-        List<String> trayIdList = listWaitingTrayId();
-        return trayIdList.size();
-    }
-
-    @Override
-    public int countRunningTray() {
-        List<String> trayIdList = listRunningTrayId();
+    public int countTray(String status) {
+        List<String> trayIdList = listTrayId(status);
         return trayIdList.size();
     }
 

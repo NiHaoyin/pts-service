@@ -41,16 +41,11 @@ public class TrayController {
 
     @GetMapping("/listid")
     public Object handleListTrayId(@RequestParam("status") String status){
-        try{
-            if(status.equals("waiting")){
-                return JsonUtil.success(trayService.listWaitingTrayId());
-            }else if(status.equals("running")){
-                return JsonUtil.success(trayService.listRunningTrayId());
-            }else{
-                return JsonUtil.failure("状态错误");
-            }
-        }catch(Exception e){
-            return JsonUtil.failure(e.toString());
+        if(status.equals("running") || status.equals("noOrder")
+           || status.equals("noorder") || status.equals("waiting")){
+            return JsonUtil.success(trayService.listTrayId(status));
+        }else{
+            return JsonUtil.failure("参数错误");
         }
     }
 
@@ -66,25 +61,21 @@ public class TrayController {
 
     @GetMapping("/list")
     public Object handleListTray(@RequestParam("status") String status){
-        switch (status){
-            case "waiting":
-                return JsonUtil.success(trayService.listWaitingTray());
-            case "running":
-                return JsonUtil.success(trayService.listRunningTray());
-            default:
-                return JsonUtil.failure("参数错误");
+        if(status.equals("running") || status.equals("noOrder")
+                || status.equals("noorder") || status.equals("waiting")){
+            return JsonUtil.success(trayService.listTray(status));
+        }else{
+            return JsonUtil.failure("参数错误");
         }
     }
 
     @GetMapping("/count")
     public Object handleCountTray(@RequestParam("status") String status){
-        switch (status){
-            case "waiting":
-                return JsonUtil.success(trayService.countWaitingTray());
-            case "running":
-                return JsonUtil.success(trayService.countRunningTray());
-            default:
-                return JsonUtil.failure("参数错误");
+        if(status.equals("running") || status.equals("noOrder")
+                || status.equals("noorder") || status.equals("waiting")){
+            return JsonUtil.success(trayService.countTray(status));
+        }else{
+            return JsonUtil.failure("参数错误");
         }
     }
 }

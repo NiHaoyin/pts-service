@@ -58,30 +58,38 @@ public class TrayManagerImpl implements TrayManager {
             }catch (Exception e){
                 continue;
             }
-            Tray tray = new Tray(trayType, trayId, "firstCarType", "secondCarType", nodeId);
-            tray.setStatus("waiting");
+            String firstCarType = "";
+            String secondCarType = "";
+            switch (trayType){
+                case "ZD":
+                case "FD":
+                    firstCarType = "PBYSC";
+                    secondCarType = "";
+                    break;
+                case "BZJ":
+                    firstCarType = "PBTC";
+                    secondCarType = "PBYSC";
+                    break;
+                case "GFJ":
+                case "XZJ":
+                case "AZSB":
+                case "CL":
+                    firstCarType = "PBTC";
+                    secondCarType = "CC";
+                    break;
+            }
+            Tray tray = new Tray(trayType, trayId, firstCarType, secondCarType, nodeId);
+            tray.setStatus("noOrder");
             trayMap.put(trayId, tray);
         }
     }
 
     @Override
-    public List<Tray> listRunningTray() {
+    public List<Tray> listTray(String status) {
         List<Tray> ret = new ArrayList<Tray>();
         for (Map.Entry<String, Tray> entry : trayMap.entrySet()) {
             Tray tray = entry.getValue();
-            if(tray.getStatus().equals("running")){
-                ret.add(tray);
-            }
-        }
-        return ret;
-    }
-
-    @Override
-    public List<Tray> listWaitingTray() {
-        List<Tray> ret = new ArrayList<Tray>();
-        for (Map.Entry<String, Tray> entry : trayMap.entrySet()) {
-            Tray tray = entry.getValue();
-            if(tray.getStatus().equals("waiting")){
+            if(tray.getStatus().equals(status)){
                 ret.add(tray);
             }
         }
@@ -90,8 +98,7 @@ public class TrayManagerImpl implements TrayManager {
 
     public static void main(String[] args) throws IOException {
         TrayManager trayManager = new TrayManagerImpl();
-        List<Tray> waitingTray = trayManager.listWaitingTray();
-        List<Tray> runningTray = trayManager.listRunningTray();
+        List<Tray> waitingTray = trayManager.listTray("waiting");
         for(Tray t: waitingTray){
             System.out.println(t);
         }

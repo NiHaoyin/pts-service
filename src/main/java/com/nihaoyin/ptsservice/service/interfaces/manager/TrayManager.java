@@ -8,7 +8,6 @@ public interface TrayManager {
     Tray getTray(String trayId);
     void changeStatus(String trayId, String newStatus) throws Exception;
     // void init();
-    List<Tray> listRunningTray();
-    List<Tray> listWaitingTray();
+    List<Tray> listTray(String status);
     void moveTray(String trayId, String newNodeId); // move tray to a new node
 }

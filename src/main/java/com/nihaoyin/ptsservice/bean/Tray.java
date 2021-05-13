@@ -7,7 +7,7 @@ public class Tray {
     private String firstCarType;
     private String secondCarType;
 
-    private String status; // 有running和waiting两种状态
+    private String status; // 有running, waiting和noOrder 三种状态
     private String nodeId; // 这个Tray目前在哪个位置
 
     public Tray(String trayType, String trayId, String firstCarType, String secondCarType, String nodeId) {

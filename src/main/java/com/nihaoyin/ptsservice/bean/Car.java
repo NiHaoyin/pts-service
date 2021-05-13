@@ -2,9 +2,10 @@ package com.nihaoyin.ptsservice.bean;
 
 public class Car {
     private String carId;
-    private String carType;
+    private String carType; // 四种取值："PBYSC"/"PBTC1"/"PBTC2"/"CC"
     private int speed;
     private Position position;
+
     private double load;
     private String status; // 有running和waiting两种状态
     private int capacity; // 取值是1或2
@@ -21,6 +22,8 @@ public class Car {
     public String toString() {
         return "Car{" +
                 "carId='" + carId + '\'' +
+                ", carType='" + carType + '\'' +
+                ", position=" + position +
                 ", status='" + status + '\'' +
                 '}';
     }
@@ -33,6 +36,10 @@ public class Car {
 
         this.load = load;
         this.status = status;
+    }
+
+    public Car(){
+
     }
 
     public String getCarId() {

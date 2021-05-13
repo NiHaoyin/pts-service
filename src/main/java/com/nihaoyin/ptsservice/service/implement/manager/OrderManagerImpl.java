@@ -14,7 +14,11 @@ public class OrderManagerImpl implements OrderManager {
                 // priority大的在队首
                 @Override
                 public int compare(Order o1, Order o2){
-                    return Integer.compare(o2.getPriority(), o1.getPriority());
+                    if(o2.getPriority() > o1.getPriority()){
+                        return 1;
+                    }else{
+                        return -1;
+                    }
 
                 }
             }
@@ -75,19 +79,28 @@ public class OrderManagerImpl implements OrderManager {
 
     public synchronized void changeStatus(int orderId, String newStatus) throws Exception{
         Order order = getOrder(orderId);
+        if(order == null){
+            throw new Exception("orderId不存在");
+        }
         if(order.getStatus().equals(newStatus)){
             throw new Exception("参数错误，该订单已经处于 "+newStatus+" 状态");
         }
-        if(newStatus.equals("running")){
-            waitingQueue.remove(order);
-            runningList.add(order);
-            order.setStatus("running");
-        }else if(newStatus.equals("waiting")){
-            runningList.remove(order);
-            waitingQueue.add(order);
-            order.setStatus("waiting");
-        }else{
-            throw new Exception("参数错误: "+newStatus+"不存在");
+        switch (newStatus) {
+            case "running":
+                waitingQueue.remove(order);
+                runningList.add(order);
+                order.setStatus("running");
+                break;
+            case "waiting":
+                runningList.remove(order);
+                waitingQueue.add(order);
+                order.setStatus("waiting");
+                break;
+            case "finished":
+                runningList.remove(order);
+                break;
+            default:
+                throw new Exception("参数错误: " + newStatus + "不存在");
         }
     }
 
