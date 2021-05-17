@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nihaoyin.ptsservice.dao.OrderDao">
+    <select id="listOrder" resultType="com.nihaoyin.ptsservice.bean.Order">
+        SELECT * FROM pallet_transport_system.order
+        WHERE is_finished = #{isFinished} AND is_deleted = false
+        LIMIT #{base}, #{offset}
+    </select>
+
+    <select id="getOrder" resultType="com.nihaoyin.ptsservice.bean.Order">
+        SELECT * FROM pallet_transport_system.order
+        WHERE order_id = #{orderId} AND is_deleted = false
+    </select>
+
+    <insert id="addOrder" parameterType="com.nihaoyin.ptsservice.bean.Order">
+        INSERT INTO pallet_transport_system.order(order_id, user_id, tray_id, src, dst, priority, car_id, is_deleted, is_finished, created)
+        values(#{orderId}, #{userId}, #{trayId}, #{src}, #{dst}, #{priority}, null, false, false, NOW())
+    </insert>
+
+    <update id="deleteOrder">
+        UPDATE pallet_transport_system.order
+        SET is_deleted = true WHERE order_id=#{orderId};
+    </update>
+
+    <update id="finishOrder">
+        UPDATE pallet_transport_system.order
+        SET is_finished = true WHERE order_id=#{orderId};
+    </update>
+
+    <select id="getNextOrderId" resultType="java.lang.Integer">
+        SELECT MAX(order_id)+1 FROM pallet_transport_system.order
+    </select>
+</mapper>

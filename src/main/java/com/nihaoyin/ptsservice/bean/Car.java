@@ -10,6 +10,12 @@ public class Car {
     private String status; // 有running和waiting两种状态
     private int capacity; // 取值是1或2
 
+    private String driver;
+
+    public String getDriver() {
+        return driver;
+    }
+
     public int getCapacity() {
         return capacity;
     }

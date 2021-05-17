@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nihaoyin.ptsservice.dao.UserDao">
+    <select id="getUserId" resultType="java.lang.Integer">
+            SELECT id FROM pallet_transport_system.user
+            WHERE username=#{username}
+            <if test="password != null">
+                AND password=#{password}
+            </if>
+            AND active = true
+    </select>
+
+    <select id="countUsername" resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM pallet_transport_system.user
+        WHERE username=#{username}
+    </select>
+
+    <select id="getNextUserId" resultType="java.lang.Integer">
+        SELECT MAX(id)+1 FROM pallet_transport_system.user
+    </select>
+
+    <select id="getUserStatus" resultType="java.lang.Boolean">
+        SELECT active FROM pallet_transport_system.user
+        WHERE id=#{userId}
+    </select>
+
+    <update id="changeStatus">
+        UPDATE pallet_transport_system.user
+        SET active = #{status} WHERE id=#{userId};
+    </update>
+
+    <update id="activateAllUser">
+        UPDATE pallet_transport_system.user
+        SET active = REPLACE(active, 0, 1)
+    </update>
+
+    <select id="listUser" resultType="com.nihaoyin.ptsservice.bean.User">
+        SELECT * FROM pallet_transport_system.user
+        LIMIT #{base}, #{offset}
+    </select>
+
+    <select id="countUser" resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM pallet_transport_system.user
+    </select>
+
+    <insert id="addUser" parameterType="com.nihaoyin.ptsservice.bean.User">
+        INSERT INTO pallet_transport_system.user(id, username, password, created, active)
+        values(#{userId}, #{username}, #{password}, NOW(), true )
+    </insert>
+
+    <delete id="deleteUser">
+        delete from pallet_transport_system.user where id = #{userId}
+    </delete>
+</mapper>
