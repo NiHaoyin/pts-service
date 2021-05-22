@@ -63,7 +63,7 @@ public class OrderServiceImpl implements OrderService, InitializingBean {
             newOrder.setOrderId(nextOrderId);
             nextOrderId++;
             resourceManager.placeOrder(newOrder);
-            orderDao.addOrder(newOrder);
+//            orderDao.addOrder(newOrder);
             //logger.info("成功下单 {}", newOrder.toString());
         }else{
             //logger.info("订单参数错误 {}", newOrder.toString());
@@ -73,9 +73,23 @@ public class OrderServiceImpl implements OrderService, InitializingBean {
 
     public void deleteOrder(int orderId) throws Exception {
         resourceManager.deleteOrder(orderId);
-        orderDao.deleteOrder(orderId);
+        // orderDao.deleteOrder(orderId);
     }
 
+    public void finishOrder(int orderId) throws Exception{
+        Order order = resourceManager.getOrder(orderId);
+        if (order == null){
+            throw new Exception("orderId不存在");
+        }
+        logger.info("完成订单 {}", order.toString());
+        resourceManager.finishOrder(order.getOrderId(), order.getCarId());
+        orderDao.addOrder(order);
+    }
+
+    public void setCarId(int orderId, String carId){
+        orderDao.setCarId(orderId, carId);
+    }
+    
     // 随机生成70条订单
     public synchronized void init() throws Exception {
         nextOrderId = orderDao.getNextOrderId();

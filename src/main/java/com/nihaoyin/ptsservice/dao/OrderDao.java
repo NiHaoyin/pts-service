@@ -17,5 +17,5 @@ public interface OrderDao {
                           @Param("base") int base,
                           @Param("offset") int offset);
     Integer getNextOrderId();
-
+    void setCarId(@Param("orderId") int orderId, @Param("carId") String carId);
 }

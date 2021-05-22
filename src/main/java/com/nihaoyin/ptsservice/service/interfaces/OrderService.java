@@ -15,5 +15,7 @@ public interface OrderService {
     List<Order> listFinishedOrder(int base, int offset);
     void placeOrder(Order newOrder) throws Exception;
     void deleteOrder(int orderId) throws Exception;
+    void finishOrder(int orderId) throws Exception;
     void init() throws Exception;
+    void setCarId(int orderId, String carId);
 }

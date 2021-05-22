@@ -1,0 +1,22 @@
+services:
+#  nginx: #服务名称
+#    image: nginx-latest #镜像版本
+#    ports:
+#    - 80:80 #暴露端口
+#    volumes: #挂载
+#    - /ubuntu/nginx/html:/usr/share/nginx/html
+#    - /ubuntu/nginx/nginx.config:/etc/nginx/nginx.config
+#    privileged: true
+  mysql:
+    image: mysql:8.0.23
+    ports:
+    - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+#  pts-service:
+#    image: pts-service:latest
+#    build: .
+#    ports:
+#    - 8081:8081
+#    depends_on:
+#      - mysql

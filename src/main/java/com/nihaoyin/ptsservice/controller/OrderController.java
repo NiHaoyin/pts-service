@@ -65,7 +65,7 @@ public class OrderController {
     @GetMapping("/list")
     public Object handleListOrder(@RequestParam("status") String status,
                                   @RequestParam(name="base", defaultValue="0") int base,
-                                  @RequestParam(name="offset", defaultValue = "10")int offset){
+                                  @RequestParam(name="offset", defaultValue = "100")int offset){
         switch (status) {
             case "waiting":
                 return JsonUtil.success(orderService.listWaitingOrder());
@@ -75,6 +75,18 @@ public class OrderController {
                 return JsonUtil.success(orderService.listFinishedOrder(base, offset));
             default:
                 return JsonUtil.failure("状态错误");
+        }
+    }
+
+    @PutMapping("/finish")
+    public Object handleFinishOrder(@RequestParam("orderid") int orderId){
+        logger.info("订单完成 {}", orderId);
+        try{
+            orderService.finishOrder(orderId);
+            return JsonUtil.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return JsonUtil.failure(e.toString());
         }
     }
 

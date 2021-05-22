@@ -151,8 +151,13 @@ public class CarManagerImpl implements CarManager {
             carType = row.getCell(1).getStringCellValue(); //运输车类型
             carX = row.getCell(4).getNumericCellValue();//获取集配点x坐标
             carY = row.getCell(5).getNumericCellValue();//获取集配点y坐标
+            String driver = row.getCell(6).getStringCellValue();
+            int speed = Integer.parseInt(row.getCell(7).getStringCellValue());
+            int load = Integer.parseInt(row.getCell(8).getStringCellValue());
+            int capacity = Integer.parseInt(row.getCell(9).getStringCellValue());
             Position carPosition= new Position((int)carX,(int)carY,0);
-            Car car = new Car(carId, carType, 30, carPosition, 0.0, "waiting");
+
+            Car car = new Car(carId, carType, speed, carPosition, load, "waiting", driver, capacity);
             pushCar2WL(car);
         }
     }

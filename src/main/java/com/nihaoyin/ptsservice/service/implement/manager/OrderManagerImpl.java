@@ -19,7 +19,6 @@ public class OrderManagerImpl implements OrderManager {
                     }else{
                         return -1;
                     }
-
                 }
             }
     );
@@ -127,25 +126,25 @@ public class OrderManagerImpl implements OrderManager {
         }
     }
 
-    public static void main(String[] args) {
-        OrderManager orderManager = new OrderManagerImpl();
-        Random r = new Random(1);
-        orderManager.getWaitingQueue();
-        for(int i = 0; i < 30; i++){
-            orderManager.pushOrder2WQ(new Order(r.nextInt(5)));
-        }
-        System.out.println("///////////////////");
-        orderManager.printWaitingQueue();
-        System.out.println("///////////////////");
-        orderManager.printRunningList();
-        System.out.println("///////////////////");
-
-        for(int i = 0; i < 30; i++){
-            orderManager.pushOrder2RL(orderManager.popOrderFromWQ());
-        }
+//    public static void main(String[] args) {
+//        OrderManager orderManager = new OrderManagerImpl();
+//        Random r = new Random(1);
+//        orderManager.getWaitingQueue();
+//        for(int i = 0; i < 30; i++){
+//            orderManager.pushOrder2WQ(new Order(r.nextInt(5)));
+//        }
+//        System.out.println("///////////////////");
 //        orderManager.printWaitingQueue();
-        System.out.println("///////////////////");
-        orderManager.printRunningList();
-        System.out.println("///////////////////");
-    }
+//        System.out.println("///////////////////");
+//        orderManager.printRunningList();
+//        System.out.println("///////////////////");
+//
+//        for(int i = 0; i < 30; i++){
+//            orderManager.pushOrder2RL(orderManager.popOrderFromWQ());
+//        }
+////        orderManager.printWaitingQueue();
+//        System.out.println("///////////////////");
+//        orderManager.printRunningList();
+//        System.out.println("///////////////////");
+//    }
 }

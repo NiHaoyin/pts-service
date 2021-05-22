@@ -1,15 +1,17 @@
 package com.nihaoyin.ptsservice.bean;
 
+import java.util.Date;
+
 public class Order {
     private String src; // 起点(nodeId)
     private String dst; // 终点(nodeId)
-    private String trayId;
-    private int orderId; // 只有orderId和userId是int类型，其他Id都是String类型
-    private int priority;
-    private int userId;
-    private String carId;
-    private String carType;
-    private String status;
+    private String trayId; // 运送的托盘Id
+    private int orderId;  // 主键
+    private int priority; // 优先级
+    private int userId; // 下单人的用户Id
+    private String carId; // 匹配的运输车Id，在没匹配之前该属性为null
+    private String carType; // 匹配的运输车类型，在没匹配之前该属性为null
+    private String status; // 状态，有waiting, running, finished三种取值
 
     private String created;
     private boolean isDeleted;
@@ -25,6 +27,7 @@ public class Order {
         this.priority = priority;
         this.userId = userId;
     }
+    public Order(){}
     public void setPriority(int priority) {
         this.priority = priority;
     }
@@ -126,5 +129,24 @@ public class Order {
                 ", carType='" + carType + '\'' +
                 ", status='" + status + '\'' +
                 '}';
+    }
+
+    public Order(int orderId, int userId, String trayId, String src, String dst,
+                 int priority, String carId, boolean isDeleted, boolean isFinished, Date created) {
+        this.src = src;
+        this.dst = dst;
+        this.trayId = trayId;
+        this.orderId = orderId;
+        this.priority = priority;
+        this.userId = userId;
+        this.carId = carId;
+//        this.carType = carType;
+        if(isFinished){
+            this.status = "finished";
+        }else{
+            this.status = "waiting";
+        }
+        this.created = created.toString();
+        this.isDeleted = isDeleted;
     }
 }

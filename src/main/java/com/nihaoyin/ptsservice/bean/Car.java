@@ -6,9 +6,9 @@ public class Car {
     private int speed;
     private Position position;
 
-    private double load;
+    private int load; // 载重
     private String status; // 有running和waiting两种状态
-    private int capacity; // 取值是1或2
+    private int capacity; // 载位，取值是1或2
 
     private String driver;
 
@@ -34,7 +34,7 @@ public class Car {
                 '}';
     }
 
-    public Car(String carId, String carType, int speed, Position position, double load, String status) {
+    public Car(String carId, String carType, int speed, Position position, int load, String status, String driver, int capacity) {
         this.carId = carId;
         this.carType = carType;
         this.speed = speed;
@@ -42,6 +42,8 @@ public class Car {
 
         this.load = load;
         this.status = status;
+        this.driver = driver;
+        this.capacity = capacity;
     }
 
     public Car(){
@@ -88,7 +90,7 @@ public class Car {
         this.position = position;
     }
 
-    public void setLoad(double load) {
+    public void setLoad(int load) {
         this.load = load;
     }
 

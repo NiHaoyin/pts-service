@@ -17,7 +17,7 @@
 
     <insert id="addOrder" parameterType="com.nihaoyin.ptsservice.bean.Order">
         INSERT INTO pallet_transport_system.order(order_id, user_id, tray_id, src, dst, priority, car_id, is_deleted, is_finished, created)
-        values(#{orderId}, #{userId}, #{trayId}, #{src}, #{dst}, #{priority}, null, false, false, NOW())
+        values(#{orderId}, #{userId}, #{trayId}, #{src}, #{dst}, #{priority}, #{carId}, false, true, NOW())
     </insert>
 
     <update id="deleteOrder">
@@ -28,6 +28,11 @@
     <update id="finishOrder">
         UPDATE pallet_transport_system.order
         SET is_finished = true WHERE order_id=#{orderId};
+    </update>
+
+    <update id="setCarId">
+        UPDATE pallet_transport_system.order
+        SET car_id = #{carId} WHERE order_id=#{orderId};
     </update>
 
     <select id="getNextOrderId" resultType="java.lang.Integer">

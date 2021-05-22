@@ -175,14 +175,17 @@ public class ResourceManagerImpl implements ResourceManager {
 
     // 1 订单状态改为finished
     // 2 车辆状态改为waiting
-    // 3 托盘状态改为noOrder
-    // 4 托盘位置改为终点
-    // 5 终点放上托盘
+    // 3 车辆位置改为订单目的地位置
+    // 4 托盘状态改为noOrder
+    // 5 托盘位置改为终点
+    // 6 终点放上托盘
     public void finishOrder(int orderId, String carId) throws Exception {
         Order order = orderManager.getOrder(orderId);
         logger.info("\n 完成订单 {}", order.toString());
         changeOrderStatus(orderId, "finished");
         changeCarStatus(carId, "waiting");
+        Car car = carManager.getCar(carId);
+        car.setPosition(nodeManager.getNode(order.getDst()).getPosition());
         Tray tray = trayManager.getTray(order.getTrayId());
         tray.setNodeId(order.getDst());
         tray.setStatus("noOrder");

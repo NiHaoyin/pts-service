@@ -131,7 +131,7 @@ public class Dijkstra {
 
     public static int[][] readDMatrix() throws IOException
     {
-        XSSFWorkbook DMatrixXwb = new XSSFWorkbook("dMatrix.xlsx");
+        XSSFWorkbook DMatrixXwb = new XSSFWorkbook("src/main/java/com/nihaoyin/ptsservice/config/dMatrix.xlsx");
         DMatrixXwb.close();
         XSSFSheet DMatrixSheet = DMatrixXwb.getSheetAt(0);
         XSSFRow DMatrixRow;
