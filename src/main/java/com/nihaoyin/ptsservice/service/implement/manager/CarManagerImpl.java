@@ -123,7 +123,9 @@ public class CarManagerImpl implements CarManager {
                     waitingCCList.remove(car);
                     break;
             }
-            runningList.add(car);
+            if(!runningList.contains(car)){
+                runningList.add(car);
+            }
             car.setStatus(newStatus);
         }else if(newStatus.equals("waiting")){
             runningList.remove(car);

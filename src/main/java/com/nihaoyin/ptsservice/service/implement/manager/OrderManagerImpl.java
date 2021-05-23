@@ -16,6 +16,8 @@ public class OrderManagerImpl implements OrderManager {
                 public int compare(Order o1, Order o2){
                     if(o2.getPriority() > o1.getPriority()){
                         return 1;
+                    }else if (o2.getPriority() == o1.getPriority()){
+                        return 1;
                     }else{
                         return -1;
                     }
@@ -126,25 +128,23 @@ public class OrderManagerImpl implements OrderManager {
         }
     }
 
-//    public static void main(String[] args) {
-//        OrderManager orderManager = new OrderManagerImpl();
-//        Random r = new Random(1);
-//        orderManager.getWaitingQueue();
-//        for(int i = 0; i < 30; i++){
-//            orderManager.pushOrder2WQ(new Order(r.nextInt(5)));
-//        }
-//        System.out.println("///////////////////");
-//        orderManager.printWaitingQueue();
-//        System.out.println("///////////////////");
-//        orderManager.printRunningList();
-//        System.out.println("///////////////////");
-//
-//        for(int i = 0; i < 30; i++){
-//            orderManager.pushOrder2RL(orderManager.popOrderFromWQ());
-//        }
-////        orderManager.printWaitingQueue();
-//        System.out.println("///////////////////");
-//        orderManager.printRunningList();
-//        System.out.println("///////////////////");
-//    }
+    public static void main(String[] args) {
+        OrderManager orderManager = new OrderManagerImpl();
+        Random r = new Random(1);
+        orderManager.getWaitingQueue();
+        for(int i = 0; i < 30; i++){
+            Order o = new Order(5);
+            o.setOrderId(i);
+            orderManager.pushOrder2WQ(o);
+
+        }
+
+
+
+        for(int i = 0; i < 30; i++){
+            orderManager.pushOrder2RL(orderManager.popOrderFromWQ());
+        }
+
+
+    }
 }

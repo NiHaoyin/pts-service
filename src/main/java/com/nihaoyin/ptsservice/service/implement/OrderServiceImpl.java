@@ -89,7 +89,7 @@ public class OrderServiceImpl implements OrderService, InitializingBean {
     public void setCarId(int orderId, String carId){
         orderDao.setCarId(orderId, carId);
     }
-    
+
     // 随机生成70条订单
     public synchronized void init() throws Exception {
         nextOrderId = orderDao.getNextOrderId();

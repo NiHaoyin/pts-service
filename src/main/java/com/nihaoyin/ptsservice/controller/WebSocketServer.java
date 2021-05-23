@@ -20,8 +20,6 @@ import com.nihaoyin.ptsservice.service.implement.router.PathPlanning;
 import com.nihaoyin.ptsservice.service.interfaces.OrderService;
 import com.nihaoyin.ptsservice.service.interfaces.manager.ResourceManager;
 import com.nihaoyin.ptsservice.util.JsonUtil;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-import org.apache.tomcat.util.buf.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +27,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
