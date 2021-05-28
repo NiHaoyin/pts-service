@@ -35,7 +35,7 @@ public class LoginController {
             return JsonUtil.failure("用户名或密码错误");
         }else{
             request.getSession().setAttribute("USER_ID", user.getUserId());
-            return JsonUtil.success();
+            return JsonUtil.success(userId);
         }
     }
 }

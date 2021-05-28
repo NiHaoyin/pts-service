@@ -4,6 +4,8 @@ public class Trace {
     public Position position;
     public boolean loadPoint;
     public boolean unloadPoint;
+    public String trayId;
+    public String setPointId;
 
     public Trace(Position position, boolean loadPoint, boolean unloadPoint){
         this.position = position;

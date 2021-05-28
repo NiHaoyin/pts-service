@@ -127,10 +127,12 @@ public class CarManagerImpl implements CarManager {
                 runningList.add(car);
             }
             car.setStatus(newStatus);
-        }else if(newStatus.equals("waiting")){
+        }else if(newStatus.equals("waiting") && car.getStatus().equals("running")){
             runningList.remove(car);
             pushCar2WL(car);
             car.setStatus(newStatus);
+        }else if(newStatus.equals("waiting") && car.getStatus().equals("waiting")) {
+            logger.info("拼单车完成 {}", car.toString());
         }else{
             throw new Exception("参数错误: "+newStatus+"不合法");
         }

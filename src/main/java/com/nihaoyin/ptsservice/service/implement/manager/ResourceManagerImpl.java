@@ -72,7 +72,7 @@ public class ResourceManagerImpl implements ResourceManager {
                         ret.add(order);
                         return ret;
                     }else{
-                        logger.info("目前没有空余车辆, 订单重新插入等待队列 {}", order.toString());
+                        logger.debug("目前没有空余车辆, 订单重新插入等待队列 {}", order.toString());
                         int priority = order.getPriority();
                         if(priority > 1){
                             order.setPriority(priority-1);
@@ -118,7 +118,7 @@ public class ResourceManagerImpl implements ResourceManager {
                             runOrder(order, freeCar);
                             ret.add(order);
                         }else{
-                            logger.info("目前没有空余车辆，订单重新插入等待队列 {}", order.toString());
+                            logger.debug("目前没有空余车辆，订单重新插入等待队列 {}", order.toString());
                             int priority = order.getPriority();
                             if(priority > 1){
                                 order.setPriority(priority-1);
@@ -142,7 +142,7 @@ public class ResourceManagerImpl implements ResourceManager {
                         runOrder(order, freeCar);
                         ret.add(order);
                     }else{
-                        logger.info("目前没有空余车辆, 订单重新插入等待队列 {}", order.toString());
+                        logger.debug("目前没有空余车辆, 订单重新插入等待队列 {}", order.toString());
                         int priority = order.getPriority();
                         if(priority > 1){
                             order.setPriority(priority-1);

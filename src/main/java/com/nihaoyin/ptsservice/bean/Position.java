@@ -19,4 +19,8 @@ public class Position {
                 ", y=" + y +
                 '}';
     }
+
+    public boolean equals(Position p){
+        return p.x == this.x && p.y == this.y;
+    }
 }

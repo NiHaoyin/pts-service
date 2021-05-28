@@ -40,6 +40,13 @@ public class OrderServiceImpl implements OrderService, InitializingBean {
         Order order = resourceManager.getOrder(orderId);
         if(order == null){
             order = orderDao.getOrder(orderId);
+            if(order.getCarId().startsWith("PBTC")){
+                order.setCarType("平板拖车");
+            }else if(order.getCarId().startsWith("CC")){
+                order.setCarType("叉车");
+            }else if(order.getCarId().startsWith("PBYSC")){
+                order.setCarType("平板运输车");
+            }
         }
         return order;
     }

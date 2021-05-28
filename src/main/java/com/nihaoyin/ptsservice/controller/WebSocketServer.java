@@ -67,7 +67,9 @@ public class WebSocketServer {
 
     public void startSimulation() throws Exception {
         List<Order> orders = new ArrayList<Order>();
+        Thread.sleep(15000);
         while (simulationSwitch) {
+//            Thread.sleep(10000);
             try {
                 orders = resourceManager.scheduleOrder();
 //                System.out.println(orders.get(0).toString());
@@ -75,16 +77,36 @@ public class WebSocketServer {
                 e.printStackTrace();
             }
             if (orders.isEmpty()) {
-                Thread.sleep(5000);
+                Thread.sleep(10000);
             }else{
                 if (orders.size() == 1) {
                     Order order = orders.get(0);
                     Position carPosition = resourceManager.getCar(order.getCarId()).getPosition();
                     try {
                         List<Trace> trace = getTrace(carPosition, order.getSrc(), order.getDst());
+                        logger.info("Trace ()\n", trace);
+                        for(Trace t: trace){
+                            if(t.loadPoint){
+                                t.trayId = order.getTrayId();
+                                t.setPointId = order.getSrc();
+                            }else if(t.unloadPoint){
+                                t.trayId = order.getTrayId();
+                                t.setPointId = order.getDst();
+                            }else{
+                                t.trayId = "";
+                                t.setPointId = "";
+                            }
+                        }
                         Map<String, Object> res = new HashMap<String, Object>();
                         res.put("command", "navigate");
-                        res.put("data", trace);
+                        Map<String, Object> data = new HashMap<String, Object>();
+                        data.put("carId", order.getCarId());
+                        data.put("carType", order.getCarType());
+                        data.put("carStatus", "running");
+                        data.put("carStopPosition", resourceManager.getCar(order.getCarId()).getPosition());
+                        data.put("runningTime", trace.size()/10);
+                        data.put("carRunRoute", trace);
+                        res.put("data", data);
                         sendMessage(JsonUtil.success(res));
                     }catch (Exception e) {
                         e.printStackTrace();
@@ -96,12 +118,47 @@ public class WebSocketServer {
                     Position carPosition = resourceManager.getCar(order1.getCarId()).getPosition();
                     try {
                         List<Trace> trace = getTrace(carPosition, order1.getSrc(), order2.getSrc(), order1.getDst(), order2.getDst());
-                        sendMessage(trace.toString());
+                        Node node1 = resourceManager.getNodeMap().get(order1.getSrc());
+                        Node node2 = resourceManager.getNodeMap().get(order2.getSrc());
+                        Node node3 = resourceManager.getNodeMap().get(order1.getDst());
+                        Node node4 = resourceManager.getNodeMap().get(order1.getDst());
+                        for(Trace t: trace){
+                            if(t.loadPoint){
+                                if(t.position.equals(node1.getPosition())){
+                                    t.trayId = order1.getTrayId();
+                                    t.setPointId = order1.getSrc();
+                                }else{
+                                    t.trayId = order2.getTrayId();
+                                    t.setPointId = order2.getSrc();
+                                }
+                            }else if(t.unloadPoint){
+                                if(t.position.equals(node3.getPosition())){
+                                    t.trayId = order1.getTrayId();
+                                    t.setPointId = order1.getSrc();
+                                }else{
+                                    t.trayId = order2.getTrayId();
+                                    t.setPointId = order2.getSrc();
+                                }
+                            }else{
+                                t.trayId = "";
+                                t.setPointId = "";
+                            }
+                        }
+                        Map<String, Object> res = new HashMap<String, Object>();
+                        res.put("command", "navigate");
+                        Map<String, Object> data = new HashMap<String, Object>();
+                        data.put("carId", order1.getCarId());
+                        data.put("carType", order1.getCarType());
+                        data.put("carStatus", "running");
+                        data.put("carStopPosition", resourceManager.getCar(order1.getCarId()).getPosition());
+                        data.put("runningTime", trace.size()/10);
+                        data.put("carRunRoute", trace);
+                        res.put("data", data);
+                        sendMessage(JsonUtil.success(res));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-
             }
         }
     }
@@ -123,9 +180,14 @@ public class WebSocketServer {
             this.session = session;
             System.out.println(this.session);
         } else {
-            try {
-                sendMessage("连接失败");
-            } catch (Exception e) {
+//            try {
+//                sendMessage("连接失败");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+            try{
+                session.getBasicRemote().sendText("连接已被占用");
+            }catch (IOException e){
                 e.printStackTrace();
             }
         }
@@ -133,22 +195,14 @@ public class WebSocketServer {
 
     @OnClose
     public void onClose() {
+        logger.info("socket closed");
         this.session = null;
         simulationSwitch = false;
     }
 
-    /**
-     * 收到客户端消息后调用的方法
-     *
-     * @param message 客户端发送过来的消息
-     */
     @OnMessage
     public void onMessage(String message, Session session) {
-//        logger.info("报文: " + message);
-        //可以群发消息
-        //消息保存到数据库、redis
         try {
-            //解析发送的报文
             JSONObject jsonObject = JSON.parseObject(message);
             System.out.println(jsonObject);
             String command = jsonObject.getString("command");
