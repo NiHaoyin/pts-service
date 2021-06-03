@@ -27,7 +27,7 @@ public class CarManagerImpl implements CarManager {
     }
 
 
-    public List<Car> listRunningCar(){
+     public List<Car> listRunningCar(){
         return runningList;
     }
 
@@ -57,7 +57,7 @@ public class CarManagerImpl implements CarManager {
                 return null;
         }
     }
-    public synchronized Car getCar(String carId){
+    public Car getCar(String carId){
         for(Car car : runningList){
             if(car.getCarId().equals(carId)){
                 return car;

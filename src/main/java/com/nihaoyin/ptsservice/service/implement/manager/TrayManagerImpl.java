@@ -23,7 +23,7 @@ public class TrayManagerImpl implements TrayManager {
     }
 
     @Override
-    public void changeStatus(String trayId, String newStatus) throws Exception {
+    public synchronized void changeStatus(String trayId, String newStatus) throws Exception {
         Tray tray = trayMap.get(trayId);
         if(tray == null){
             throw new Exception("该trayId不存在");

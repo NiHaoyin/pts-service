@@ -67,96 +67,99 @@ public class WebSocketServer {
 
     public void startSimulation() throws Exception {
         List<Order> orders = new ArrayList<Order>();
-        Thread.sleep(15000);
-        while (simulationSwitch) {
-//            Thread.sleep(10000);
-            try {
-                orders = resourceManager.scheduleOrder();
+//        Thread.sleep(15000);
+        // 死循环
+        while(true) {
+            while (simulationSwitch) {
+            Thread.sleep(3000);
+                try {
+                    orders = resourceManager.scheduleOrder();
 //                System.out.println(orders.get(0).toString());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (orders.isEmpty()) {
-                Thread.sleep(10000);
-            }else{
-                if (orders.size() == 1) {
-                    Order order = orders.get(0);
-                    Position carPosition = resourceManager.getCar(order.getCarId()).getPosition();
-                    try {
-                        List<Trace> trace = getTrace(carPosition, order.getSrc(), order.getDst());
-                        logger.info("Trace ()\n", trace);
-                        for(Trace t: trace){
-                            if(t.loadPoint){
-                                t.trayId = order.getTrayId();
-                                t.setPointId = order.getSrc();
-                            }else if(t.unloadPoint){
-                                t.trayId = order.getTrayId();
-                                t.setPointId = order.getDst();
-                            }else{
-                                t.trayId = "";
-                                t.setPointId = "";
-                            }
-                        }
-                        Map<String, Object> res = new HashMap<String, Object>();
-                        res.put("command", "navigate");
-                        Map<String, Object> data = new HashMap<String, Object>();
-                        data.put("carId", order.getCarId());
-                        data.put("carType", order.getCarType());
-                        data.put("carStatus", "running");
-                        data.put("carStopPosition", resourceManager.getCar(order.getCarId()).getPosition());
-                        data.put("runningTime", trace.size()/10);
-                        data.put("carRunRoute", trace);
-                        res.put("data", data);
-                        sendMessage(JsonUtil.success(res));
-                    }catch (Exception e) {
-                        e.printStackTrace();
-                        Thread.sleep(5000);
-                    }
-                } else if (orders.size() == 2) {
-                    Order order1 = orders.get(0);
-                    Order order2 = orders.get(1);
-                    Position carPosition = resourceManager.getCar(order1.getCarId()).getPosition();
-                    try {
-                        List<Trace> trace = getTrace(carPosition, order1.getSrc(), order2.getSrc(), order1.getDst(), order2.getDst());
-                        Node node1 = resourceManager.getNodeMap().get(order1.getSrc());
-                        Node node2 = resourceManager.getNodeMap().get(order2.getSrc());
-                        Node node3 = resourceManager.getNodeMap().get(order1.getDst());
-                        Node node4 = resourceManager.getNodeMap().get(order1.getDst());
-                        for(Trace t: trace){
-                            if(t.loadPoint){
-                                if(t.position.equals(node1.getPosition())){
-                                    t.trayId = order1.getTrayId();
-                                    t.setPointId = order1.getSrc();
-                                }else{
-                                    t.trayId = order2.getTrayId();
-                                    t.setPointId = order2.getSrc();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (orders.isEmpty()) {
+                    Thread.sleep(3000);
+                } else {
+                    if (orders.size() == 1) {
+                        Order order = orders.get(0);
+                        Position carPosition = resourceManager.getCar(order.getCarId()).getPosition();
+                        try {
+                            List<Trace> trace = getTrace(carPosition, order.getSrc(), order.getDst());
+                            logger.info("Trace ()\n", trace);
+                            for (Trace t : trace) {
+                                if (t.loadPoint) {
+                                    t.trayId = order.getTrayId();
+                                    t.setPointId = order.getSrc();
+                                } else if (t.unloadPoint) {
+                                    t.trayId = order.getTrayId();
+                                    t.setPointId = order.getDst();
+                                } else {
+                                    t.trayId = "";
+                                    t.setPointId = "";
                                 }
-                            }else if(t.unloadPoint){
-                                if(t.position.equals(node3.getPosition())){
-                                    t.trayId = order1.getTrayId();
-                                    t.setPointId = order1.getSrc();
-                                }else{
-                                    t.trayId = order2.getTrayId();
-                                    t.setPointId = order2.getSrc();
-                                }
-                            }else{
-                                t.trayId = "";
-                                t.setPointId = "";
                             }
+                            Map<String, Object> res = new HashMap<String, Object>();
+                            res.put("command", "navigate");
+                            Map<String, Object> data = new HashMap<String, Object>();
+                            data.put("carId", order.getCarId());
+                            data.put("carType", order.getCarType());
+                            data.put("carStatus", "running");
+                            data.put("carStopPosition", resourceManager.getCar(order.getCarId()).getPosition());
+                            data.put("runningTime", trace.size() / 10);
+                            data.put("carRunRoute", trace);
+                            res.put("data", data);
+                            sendMessage(JsonUtil.success(res));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Thread.sleep(5000);
                         }
-                        Map<String, Object> res = new HashMap<String, Object>();
-                        res.put("command", "navigate");
-                        Map<String, Object> data = new HashMap<String, Object>();
-                        data.put("carId", order1.getCarId());
-                        data.put("carType", order1.getCarType());
-                        data.put("carStatus", "running");
-                        data.put("carStopPosition", resourceManager.getCar(order1.getCarId()).getPosition());
-                        data.put("runningTime", trace.size()/10);
-                        data.put("carRunRoute", trace);
-                        res.put("data", data);
-                        sendMessage(JsonUtil.success(res));
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } else if (orders.size() == 2) {
+                        Order order1 = orders.get(0);
+                        Order order2 = orders.get(1);
+                        Position carPosition = resourceManager.getCar(order1.getCarId()).getPosition();
+                        try {
+                            List<Trace> trace = getTrace(carPosition, order1.getSrc(), order2.getSrc(), order1.getDst(), order2.getDst());
+                            Node node1 = resourceManager.getNodeMap().get(order1.getSrc());
+                            Node node2 = resourceManager.getNodeMap().get(order2.getSrc());
+                            Node node3 = resourceManager.getNodeMap().get(order1.getDst());
+                            Node node4 = resourceManager.getNodeMap().get(order1.getDst());
+                            for (Trace t : trace) {
+                                if (t.loadPoint) {
+                                    if (t.position.equals(node1.getPosition())) {
+                                        t.trayId = order1.getTrayId();
+                                        t.setPointId = order1.getSrc();
+                                    } else {
+                                        t.trayId = order2.getTrayId();
+                                        t.setPointId = order2.getSrc();
+                                    }
+                                } else if (t.unloadPoint) {
+                                    if (t.position.equals(node3.getPosition())) {
+                                        t.trayId = order1.getTrayId();
+                                        t.setPointId = order1.getSrc();
+                                    } else {
+                                        t.trayId = order2.getTrayId();
+                                        t.setPointId = order2.getSrc();
+                                    }
+                                } else {
+                                    t.trayId = "";
+                                    t.setPointId = "";
+                                }
+                            }
+                            Map<String, Object> res = new HashMap<String, Object>();
+                            res.put("command", "navigate");
+                            Map<String, Object> data = new HashMap<String, Object>();
+                            data.put("carId", order1.getCarId());
+                            data.put("carType", order1.getCarType());
+                            data.put("carStatus", "running");
+                            data.put("carStopPosition", resourceManager.getCar(order1.getCarId()).getPosition());
+                            data.put("runningTime", trace.size() / 10);
+                            data.put("carRunRoute", trace);
+                            res.put("data", data);
+                            sendMessage(JsonUtil.success(res));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -178,6 +181,7 @@ public class WebSocketServer {
         logger.info("用户连接 {}", session);
         if (this.session == null) {
             this.session = session;
+            simulator.start();
             System.out.println(this.session);
         } else {
 //            try {
@@ -197,7 +201,9 @@ public class WebSocketServer {
     public void onClose() {
         logger.info("socket closed");
         this.session = null;
-        simulationSwitch = false;
+        synchronized (this){
+            simulationSwitch = false;
+        }
     }
 
     @OnMessage
@@ -208,12 +214,13 @@ public class WebSocketServer {
             String command = jsonObject.getString("command");
             switch (command) {
                 case "startSimulation":
+                    Thread.sleep(10000);
                     simulationSwitch = true;
-                    simulator.start();
+//                    simulator.start();
                     break;
                 case "stopSimulation":
                     simulationSwitch = false;
-                    simulator.join();
+                    // simulator.join();
                     break;
                 case "initNode":
                     Map<String, Node> nodeMap = resourceManager.getNodeMap();
@@ -228,10 +235,11 @@ public class WebSocketServer {
                 case "initCar":
                     List<Car> runningCar = resourceManager.listRunningCar();
                     List<Car> waitingCar = resourceManager.listWaitingCar("all");
-                    runningCar.addAll(waitingCar);
+                    List<Car> ret = new ArrayList<Car>(waitingCar);
+                    ret.addAll(runningCar);
                     Map<String, Object> res2 = new HashMap<String, Object>();
                     res2.put("command", "initCar");
-                    res2.put("data", runningCar);
+                    res2.put("data", ret);
                     sendMessage(JsonUtil.success(res2));
             }
         } catch (Exception e) {

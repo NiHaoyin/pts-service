@@ -78,12 +78,12 @@ public class OrderServiceImpl implements OrderService, InitializingBean {
         }
     }
 
-    public void deleteOrder(int orderId) throws Exception {
+    public synchronized void deleteOrder(int orderId) throws Exception {
         resourceManager.deleteOrder(orderId);
         // orderDao.deleteOrder(orderId);
     }
 
-    public void finishOrder(int orderId) throws Exception{
+    public synchronized void finishOrder(int orderId) throws Exception{
         Order order = resourceManager.getOrder(orderId);
         if (order == null){
             throw new Exception("orderId不存在");

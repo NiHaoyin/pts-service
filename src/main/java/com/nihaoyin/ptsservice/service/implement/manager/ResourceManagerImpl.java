@@ -37,11 +37,11 @@ public class ResourceManagerImpl implements ResourceManager {
         return orderManager.getOrder(orderId);
     }
 
-    public void changeOrderStatus(int orderId, String newStatus) throws Exception {
+    public synchronized void changeOrderStatus(int orderId, String newStatus) throws Exception {
         orderManager.changeStatus(orderId, newStatus);
     }
 
-    public void changeCarStatus(String carId, String newStatus) throws Exception {
+    public synchronized void changeCarStatus(String carId, String newStatus) throws Exception {
         carManager.changeCarStatus(carId, newStatus);
     }
 
@@ -70,7 +70,6 @@ public class ResourceManagerImpl implements ResourceManager {
                         logger.info("\n指派 {} \n配送订单 {} ",freeCar.toString(), order.toString());
                         runOrder(order, freeCar);
                         ret.add(order);
-                        return ret;
                     }else{
                         logger.debug("目前没有空余车辆, 订单重新插入等待队列 {}", order.toString());
                         int priority = order.getPriority();
@@ -78,8 +77,8 @@ public class ResourceManagerImpl implements ResourceManager {
                             order.setPriority(priority-1);
                         }
                         waitingOrderList.add(order);
-                        return ret;
                     }
+                    return ret;
                 }
             case "PBTC":
                 freeCar = getNearestFreeCar("PBTC1", order.getSrc());
@@ -179,7 +178,7 @@ public class ResourceManagerImpl implements ResourceManager {
     // 4 托盘状态改为noOrder
     // 5 托盘位置改为终点
     // 6 终点放上托盘
-    public void finishOrder(int orderId, String carId) throws Exception {
+    public synchronized void finishOrder(int orderId, String carId) throws Exception {
         Order order = orderManager.getOrder(orderId);
         logger.info("\n 完成订单 {}", order.toString());
         changeOrderStatus(orderId, "finished");
@@ -289,7 +288,7 @@ public class ResourceManagerImpl implements ResourceManager {
                     nearestNode = entry.getValue();
                 }
             }
-            assert nearestNode != null;
+//            assert nearestNode != null;
             car.setPosition(nearestNode.getPosition());
             occupiedNodes.add(nearestNode.getNodeId());
         }

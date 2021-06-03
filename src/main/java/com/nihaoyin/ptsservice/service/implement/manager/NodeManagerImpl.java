@@ -120,7 +120,7 @@ public class NodeManagerImpl implements NodeManager {
     }
 
     @Override
-    public void placeTray(String nodeId, String trayId) throws Exception {
+    public synchronized void placeTray(String nodeId, String trayId) throws Exception {
         Node node = nodeMap.get(nodeId);
         if(node == null){
             throw new Exception("该nodeId不存在");
@@ -129,7 +129,7 @@ public class NodeManagerImpl implements NodeManager {
         node.setOccupied(true);
     }
 
-    public void removeTray(String nodeId) throws Exception{
+    public synchronized void removeTray(String nodeId) throws Exception{
         Node node = nodeMap.get(nodeId);
         if(node == null){
             throw new Exception("该nodeId不存在");
