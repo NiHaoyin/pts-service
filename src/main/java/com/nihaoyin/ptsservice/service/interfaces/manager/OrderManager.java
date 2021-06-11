@@ -17,4 +17,5 @@ public interface OrderManager {
     boolean isWaitingQueueEmpty();
     Order getOrder(int orderId); // 根据orderId返回一个特定Order对象
     void changeStatus(int orderId, String newStatus) throws Exception;
+    void reset();
 }

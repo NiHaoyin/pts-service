@@ -26,7 +26,6 @@ public class OrderManagerImpl implements OrderManager {
     );
     private final List<Order> runningList = new ArrayList<Order>();
 
-
     public synchronized void pushOrder2WQ(Order order){
         order.setStatus("waiting");
         waitingQueue.add(order);
@@ -126,6 +125,11 @@ public class OrderManagerImpl implements OrderManager {
         for(Order order : runningList){
            System.out.println(order.toString());
         }
+    }
+
+    public void reset(){
+        waitingQueue.clear();
+        runningList.clear();
     }
 
     public static void main(String[] args) {

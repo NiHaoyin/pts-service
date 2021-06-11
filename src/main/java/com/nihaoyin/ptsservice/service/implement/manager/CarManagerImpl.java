@@ -21,13 +21,7 @@ public class CarManagerImpl implements CarManager {
     private final List<Car> waitingCCList = new ArrayList<Car>();
     private final List<Car> runningList = new ArrayList<Car>();
 
-    // 集配初始化, 车辆开到最近的托盘集配点
-    public void init(){
-
-    }
-
-
-     public List<Car> listRunningCar(){
+    public List<Car> listRunningCar(){
         return runningList;
     }
 
@@ -57,6 +51,7 @@ public class CarManagerImpl implements CarManager {
                 return null;
         }
     }
+
     public Car getCar(String carId){
         for(Car car : runningList){
             if(car.getCarId().equals(carId)){
@@ -139,6 +134,40 @@ public class CarManagerImpl implements CarManager {
     }
 
     public CarManagerImpl() throws IOException {
+        XSSFWorkbook NodeXwb = new XSSFWorkbook("src/main/java/com/nihaoyin/ptsservice/config/car.xlsx");
+        NodeXwb.close();
+        XSSFSheet NodeSheet = NodeXwb.getSheetAt(0);
+        XSSFRow row;
+        String carId;
+        String carType;
+        double carX;
+        double carY;
+        int NLength= NodeSheet.getPhysicalNumberOfRows()-2;
+        for (int i = 1; i <= NLength; i++)
+        {
+            row = NodeSheet.getRow(i);
+            carId = row.getCell(0).getStringCellValue(); //获取运输车Id
+            carType = row.getCell(1).getStringCellValue(); //运输车类型
+            carX = row.getCell(4).getNumericCellValue();//获取集配点x坐标
+            carY = row.getCell(5).getNumericCellValue();//获取集配点y坐标
+            String driver = row.getCell(6).getStringCellValue();
+            int speed = Integer.parseInt(row.getCell(7).getStringCellValue());
+            int load = Integer.parseInt(row.getCell(8).getStringCellValue());
+            int capacity = Integer.parseInt(row.getCell(9).getStringCellValue());
+            Position carPosition= new Position((int)carX,(int)carY,0);
+
+            Car car = new Car(carId, carType, speed, carPosition, load, "waiting", driver, capacity);
+            pushCar2WL(car);
+        }
+    }
+
+    //
+    public void reset() throws IOException {
+        waitingPBTCList1.clear();
+        waitingPBYSCList.clear();
+        waitingCCList.clear();
+        waitingPBTCList2.clear();
+        runningList.clear();
         XSSFWorkbook NodeXwb = new XSSFWorkbook("src/main/java/com/nihaoyin/ptsservice/config/car.xlsx");
         NodeXwb.close();
         XSSFSheet NodeSheet = NodeXwb.getSheetAt(0);

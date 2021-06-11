@@ -5,6 +5,7 @@ import com.nihaoyin.ptsservice.bean.Node;
 import com.nihaoyin.ptsservice.bean.Order;
 import com.nihaoyin.ptsservice.bean.Tray;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -36,4 +37,5 @@ public interface ResourceManager {
     boolean checkParam(Order order) throws Exception;
     void deleteOrder(int orderId) throws Exception;
     void init() throws Exception;
+    void reset() throws Exception;
 }

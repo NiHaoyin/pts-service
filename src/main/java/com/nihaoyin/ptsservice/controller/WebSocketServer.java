@@ -196,7 +196,12 @@ public class WebSocketServer {
             }
         }
     }
-
+    /*
+    * 1 重置订单, WQ和RL清空
+    * 2 重置运输车, 所有运输车处于初始状态
+    * 3 重置集配点
+    * 4 重置托盘
+    * */
     @OnClose
     public void onClose() {
         logger.info("socket closed");
@@ -204,6 +209,12 @@ public class WebSocketServer {
         synchronized (this){
             simulationSwitch = false;
         }
+        try{
+            resourceManager.reset();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     @OnMessage

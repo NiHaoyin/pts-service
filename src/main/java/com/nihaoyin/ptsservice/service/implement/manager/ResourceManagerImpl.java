@@ -294,6 +294,14 @@ public class ResourceManagerImpl implements ResourceManager {
         }
     }
 
+    public void reset() throws Exception{
+        carManager.reset();
+        orderManager.reset();
+        nodeManager.reset();
+        trayManager.reset();
+        init();
+    }
+
     @Override
     public String getNodeId(String trayId) throws Exception{
         Tray t = trayManager.getTray(trayId);

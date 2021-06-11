@@ -21,56 +21,6 @@ public class NodeManagerImpl implements NodeManager {
     private final static Logger logger = LoggerFactory.getLogger(NodeManagerImpl.class);
     Map<String, Node> nodeMap = new HashMap<String, Node>();
 
-    public NodeManagerImpl() throws IOException {
-        XSSFWorkbook NodeXwb = new XSSFWorkbook("src/main/java/com/nihaoyin/ptsservice/config/node_1.xlsx");
-        NodeXwb.close();
-        XSSFSheet NodeSheet = NodeXwb.getSheetAt(0);
-        XSSFRow NodeRow;
-        String NodeId;
-        String NodeType;
-        double NodeX;
-        double NodeY;
-        String NodeState;
-        String TrayId;
-        boolean NodeIsOccupied;
-        int NodeVertex1;
-        int NodeVertex2;
-        String NodeMotionType;
-        int NLength= NodeSheet.getPhysicalNumberOfRows()-2;
-        for (int i = 1; i <= NLength; i++)
-        {
-            NodeRow = NodeSheet.getRow(i);
-            NodeId = NodeRow.getCell(0).getStringCellValue();///获取集配点编号
-            NodeType = NodeRow.getCell(1).getStringCellValue();//获取集配点对应托盘类型
-            NodeX = NodeRow.getCell(4).getNumericCellValue();//获取集配点x坐标
-            NodeY = NodeRow.getCell(5).getNumericCellValue();//获取集配点y坐标
-            try{
-                TrayId = NodeRow.getCell(10).getStringCellValue();//获取集配点存放的托盘Id
-            }catch (Exception e){
-                TrayId = "";
-            }
-
-            Position NodePosition= new Position((int)NodeX,(int)NodeY,0);
-            NodeState= NodeRow.getCell(6).getStringCellValue();//获取集配点占用情况
-            if (NodeState.equals("True")){
-                NodeIsOccupied=true;
-            } else{
-                NodeIsOccupied=false;
-            }
-            NodeVertex1=Integer.parseInt(NodeRow.getCell(7).getStringCellValue());//获取集配点对应节点1
-            NodeVertex2=Integer.parseInt(NodeRow.getCell(8).getStringCellValue());//获取集配点对应节点2
-            NodeMotionType=NodeRow.getCell(9).getStringCellValue();//获取集配点移动方式
-            Node node = new Node(NodeId, NodePosition,NodeIsOccupied, TrayId, NodeType,NodeVertex1,NodeVertex2,NodeMotionType);;
-//            if(NodeIsOccupied){
-//                //node= new Node(NodeId, NodePosition,NodeIsOccupied, "trayNum", NodeType,NodeVertex1,NodeVertex2,NodeMotionType);
-//                node.setTrayId("trayId");
-//            }
-
-            nodeMap.put(node.getNodeId(), node);
-        }
-    }
-
-
     @Override
     public List<Trace> getPath(Position position, String src, String dst) throws Exception{
         PathPlanning pathPlanning = new PathPlanning(position, src, "", dst, "");
@@ -156,6 +106,103 @@ public class NodeManagerImpl implements NodeManager {
         return nodeMap;
     }
 
+    public NodeManagerImpl() throws IOException {
+        XSSFWorkbook NodeXwb = new XSSFWorkbook("src/main/java/com/nihaoyin/ptsservice/config/node_1.xlsx");
+        NodeXwb.close();
+        XSSFSheet NodeSheet = NodeXwb.getSheetAt(0);
+        XSSFRow NodeRow;
+        String NodeId;
+        String NodeType;
+        double NodeX;
+        double NodeY;
+        String NodeState;
+        String TrayId;
+        boolean NodeIsOccupied;
+        int NodeVertex1;
+        int NodeVertex2;
+        String NodeMotionType;
+        int NLength= NodeSheet.getPhysicalNumberOfRows()-2;
+        for (int i = 1; i <= NLength; i++)
+        {
+            NodeRow = NodeSheet.getRow(i);
+            NodeId = NodeRow.getCell(0).getStringCellValue();///获取集配点编号
+            NodeType = NodeRow.getCell(1).getStringCellValue();//获取集配点对应托盘类型
+            NodeX = NodeRow.getCell(4).getNumericCellValue();//获取集配点x坐标
+            NodeY = NodeRow.getCell(5).getNumericCellValue();//获取集配点y坐标
+            try{
+                TrayId = NodeRow.getCell(10).getStringCellValue();//获取集配点存放的托盘Id
+            }catch (Exception e){
+                TrayId = "";
+            }
+
+            Position NodePosition= new Position((int)NodeX,(int)NodeY,0);
+            NodeState= NodeRow.getCell(6).getStringCellValue();//获取集配点占用情况
+            if (NodeState.equals("True")){
+                NodeIsOccupied=true;
+            } else{
+                NodeIsOccupied=false;
+            }
+            NodeVertex1=Integer.parseInt(NodeRow.getCell(7).getStringCellValue());//获取集配点对应节点1
+            NodeVertex2=Integer.parseInt(NodeRow.getCell(8).getStringCellValue());//获取集配点对应节点2
+            NodeMotionType=NodeRow.getCell(9).getStringCellValue();//获取集配点移动方式
+            Node node = new Node(NodeId, NodePosition,NodeIsOccupied, TrayId, NodeType,NodeVertex1,NodeVertex2,NodeMotionType);;
+//            if(NodeIsOccupied){
+//                //node= new Node(NodeId, NodePosition,NodeIsOccupied, "trayNum", NodeType,NodeVertex1,NodeVertex2,NodeMotionType);
+//                node.setTrayId("trayId");
+//            }
+
+            nodeMap.put(node.getNodeId(), node);
+        }
+    }
+
+    public void reset() throws IOException {
+        nodeMap.clear();
+        XSSFWorkbook NodeXwb = new XSSFWorkbook("src/main/java/com/nihaoyin/ptsservice/config/node_1.xlsx");
+        NodeXwb.close();
+        XSSFSheet NodeSheet = NodeXwb.getSheetAt(0);
+        XSSFRow NodeRow;
+        String NodeId;
+        String NodeType;
+        double NodeX;
+        double NodeY;
+        String NodeState;
+        String TrayId;
+        boolean NodeIsOccupied;
+        int NodeVertex1;
+        int NodeVertex2;
+        String NodeMotionType;
+        int NLength= NodeSheet.getPhysicalNumberOfRows()-2;
+        for (int i = 1; i <= NLength; i++)
+        {
+            NodeRow = NodeSheet.getRow(i);
+            NodeId = NodeRow.getCell(0).getStringCellValue();///获取集配点编号
+            NodeType = NodeRow.getCell(1).getStringCellValue();//获取集配点对应托盘类型
+            NodeX = NodeRow.getCell(4).getNumericCellValue();//获取集配点x坐标
+            NodeY = NodeRow.getCell(5).getNumericCellValue();//获取集配点y坐标
+            try{
+                TrayId = NodeRow.getCell(10).getStringCellValue();//获取集配点存放的托盘Id
+            }catch (Exception e){
+                TrayId = "";
+            }
+
+            Position NodePosition= new Position((int)NodeX,(int)NodeY,0);
+            NodeState= NodeRow.getCell(6).getStringCellValue();//获取集配点占用情况
+            if (NodeState.equals("True")){
+                NodeIsOccupied=true;
+            } else{
+                NodeIsOccupied=false;
+            }
+            NodeVertex1=Integer.parseInt(NodeRow.getCell(7).getStringCellValue());//获取集配点对应节点1
+            NodeVertex2=Integer.parseInt(NodeRow.getCell(8).getStringCellValue());//获取集配点对应节点2
+            NodeMotionType=NodeRow.getCell(9).getStringCellValue();//获取集配点移动方式
+            Node node = new Node(NodeId, NodePosition,NodeIsOccupied, TrayId, NodeType,NodeVertex1,NodeVertex2,NodeMotionType);;
+//            if(NodeIsOccupied){
+//                //node= new Node(NodeId, NodePosition,NodeIsOccupied, "trayNum", NodeType,NodeVertex1,NodeVertex2,NodeMotionType);
+//                node.setTrayId("trayId");
+//            }
+            nodeMap.put(node.getNodeId(), node);
+        }
+    }
     public static void main(String[] args) throws Exception {
         NodeManager nodeManager = new NodeManagerImpl();
         for(String s: nodeManager.listOccupiedNodes("ZD")){

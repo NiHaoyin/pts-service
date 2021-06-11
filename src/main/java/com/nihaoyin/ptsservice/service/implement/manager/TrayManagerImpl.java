@@ -39,6 +39,18 @@ public class TrayManagerImpl implements TrayManager {
         tray.setNodeId(nodeId);
     }
 
+    @Override
+    public List<Tray> listTray(String status) {
+        List<Tray> ret = new ArrayList<Tray>();
+        for (Map.Entry<String, Tray> entry : trayMap.entrySet()) {
+            Tray tray = entry.getValue();
+            if(tray.getStatus().equals(status)){
+                ret.add(tray);
+            }
+        }
+        return ret;
+    }
+
     public TrayManagerImpl() throws IOException {
         XSSFWorkbook NodeXwb = new XSSFWorkbook("src/main/java/com/nihaoyin/ptsservice/config/node_1.xlsx");
         NodeXwb.close();
@@ -84,18 +96,51 @@ public class TrayManagerImpl implements TrayManager {
         }
     }
 
-    @Override
-    public List<Tray> listTray(String status) {
-        List<Tray> ret = new ArrayList<Tray>();
-        for (Map.Entry<String, Tray> entry : trayMap.entrySet()) {
-            Tray tray = entry.getValue();
-            if(tray.getStatus().equals(status)){
-                ret.add(tray);
+    public void reset() throws IOException {
+        trayMap.clear();
+        XSSFWorkbook NodeXwb = new XSSFWorkbook("src/main/java/com/nihaoyin/ptsservice/config/node_1.xlsx");
+        NodeXwb.close();
+        XSSFSheet NodeSheet = NodeXwb.getSheetAt(0);
+        XSSFRow NodeRow;
+        String nodeId;
+        String trayType;
+        String trayId;
+        int NLength= NodeSheet.getPhysicalNumberOfRows()-2;
+        for (int i = 1; i <= NLength; i++)
+        {
+            NodeRow = NodeSheet.getRow(i);
+            nodeId = NodeRow.getCell(0).getStringCellValue();///获取集配点编号
+            trayType = NodeRow.getCell(1).getStringCellValue();//获取集配点对应托盘类型
+            try{
+                trayId = NodeRow.getCell(10).getStringCellValue();//获取集配点存放的托盘Id
+            }catch (Exception e){
+                continue;
             }
+            String firstCarType = "";
+            String secondCarType = "";
+            switch (trayType){
+                case "ZD":
+                case "FD":
+                    firstCarType = "PBYSC";
+                    secondCarType = "";
+                    break;
+                case "BZJ":
+                    firstCarType = "PBTC";
+                    secondCarType = "PBYSC";
+                    break;
+                case "GFJ":
+                case "XZJ":
+                case "AZSB":
+                case "CL":
+                    firstCarType = "PBTC";
+                    secondCarType = "CC";
+                    break;
+            }
+            Tray tray = new Tray(trayType, trayId, firstCarType, secondCarType, nodeId);
+            tray.setStatus("noOrder");
+            trayMap.put(trayId, tray);
         }
-        return ret;
     }
-
     public static void main(String[] args) throws IOException {
         TrayManager trayManager = new TrayManagerImpl();
         List<Tray> waitingTray = trayManager.listTray("waiting");

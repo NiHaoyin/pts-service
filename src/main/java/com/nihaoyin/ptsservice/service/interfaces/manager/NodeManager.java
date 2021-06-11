@@ -20,4 +20,5 @@ public interface NodeManager {
     String getTrayType(String nodeId);
     Node getNode(String nodeId);
     Map<String, Node> getNodeMap();
+    void reset() throws IOException;
 }
