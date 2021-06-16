@@ -49,7 +49,7 @@ public class WebSocketServer {
      */
     private Session session = null;
     private final ResourceManager resourceManager = ResourceManagerFactory.getResourceManager();
-    private SimulationThread simulator = new SimulationThread("simulator");
+    private final SimulationThread simulator = new SimulationThread("simulator");
 
     class SimulationThread extends Thread {
         private String name;       // 表示线程的名称
@@ -70,8 +70,10 @@ public class WebSocketServer {
 //        Thread.sleep(15000);
         // 死循环
         while(true) {
+            Thread.sleep(1000);
             while (simulationSwitch) {
-            Thread.sleep(3000);
+                Thread.sleep(2000);
+                logger.info("start scheduling");
                 try {
                     orders = resourceManager.scheduleOrder();
 //                System.out.println(orders.get(0).toString());
@@ -83,10 +85,11 @@ public class WebSocketServer {
                 } else {
                     if (orders.size() == 1) {
                         Order order = orders.get(0);
+                        logger.info("start to run order{}", order.toString());
                         Position carPosition = resourceManager.getCar(order.getCarId()).getPosition();
                         try {
                             List<Trace> trace = getTrace(carPosition, order.getSrc(), order.getDst());
-                            logger.info("Trace ()\n", trace);
+//                            logger.info("Trace {}\n", trace);
                             for (Trace t : trace) {
                                 if (t.loadPoint) {
                                     t.trayId = order.getTrayId();
@@ -226,7 +229,9 @@ public class WebSocketServer {
             switch (command) {
                 case "startSimulation":
                     Thread.sleep(10000);
+                    logger.info("waiting order number: {}", resourceManager.listWaitingOrder().size());
                     simulationSwitch = true;
+                    logger.info("The switch is on");
 //                    simulator.start();
                     break;
                 case "stopSimulation":

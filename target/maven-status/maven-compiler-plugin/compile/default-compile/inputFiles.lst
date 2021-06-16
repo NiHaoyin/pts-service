@@ -20,7 +20,6 @@ E:\GraduateProject\pts-service\src\main\java\com\nihaoyin\ptsservice\PalletTrans
 E:\GraduateProject\pts-service\src\main\java\com\nihaoyin\ptsservice\service\interfaces\manager\TrayManager.java
 E:\GraduateProject\pts-service\src\main\java\com\nihaoyin\ptsservice\config\CORSInterceptor.java
 E:\GraduateProject\pts-service\src\main\java\com\nihaoyin\ptsservice\service\interfaces\OrderService.java
-E:\GraduateProject\pts-service\src\main\java\com\nihaoyin\ptsservice\util\WebConfig.java
 E:\GraduateProject\pts-service\src\main\java\com\nihaoyin\ptsservice\bean\Car.java
 E:\GraduateProject\pts-service\src\main\java\com\nihaoyin\ptsservice\service\interfaces\TrayService.java
 E:\GraduateProject\pts-service\src\main\java\com\nihaoyin\ptsservice\service\implement\manager\CarManagerImpl.java
@@ -48,3 +47,4 @@ E:\GraduateProject\pts-service\src\main\java\com\nihaoyin\ptsservice\bean\Node.j
 E:\GraduateProject\pts-service\src\main\java\com\nihaoyin\ptsservice\dao\OrderDao.java
 E:\GraduateProject\pts-service\src\main\java\com\nihaoyin\ptsservice\controller\OrderController.java
 E:\GraduateProject\pts-service\src\main\java\com\nihaoyin\ptsservice\service\interfaces\UserService.java
+E:\GraduateProject\pts-service\src\main\java\com\nihaoyin\ptsservice\config\WebConfig.java
